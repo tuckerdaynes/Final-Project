@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .result {
+            font-weight: bold;
+        }
+        .reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .reset-btn:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Number Guessing Game</h1>
+    <p>Guess a number between 1 and 100:</p>
+    <input type="number" id="guessInput" min="1" max="100" />
+    <button onclick="checkGuess()">Submit Guess</button>
+
+    <div class="message" id="message"></div>
+    <button class="reset-btn" id="resetBtn" onclick="resetGame()" style="display: none;">Play Again</button>
+</div>
+
+<script>
+    let randomNumber;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    function startGame() {
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        document.getElementById("guessInput").value = '';
+        document.getElementById("message").innerHTML = `You have ${maxAttempts} attempts left.`;
+        document.getElementById("resetBtn").style.display = 'none';
+        document.querySelector("button").disabled = false;
+    }
+
+    function checkGuess() {
+        const guess = parseInt(document.getElementById("guessInput").value);
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            document.getElementById("message").innerHTML = "Please enter a number between 1 and 100.";
+            return;
+        }
+
+        attempts++;
+
+        if (guess === randomNumber) {
+            document.getElementById("message").innerHTML = `Congratulations! You guessed the correct number in ${attempts} attempts.`;
+            document.getElementById("resetBtn").style.display = 'block';
+            document.querySelector("button").disabled = true;
+        } else if (guess < randomNumber) {
+            document.getElementById("message").innerHTML = `Too low! You have ${maxAttempts - attempts} attempts left.`;
+        } else {
+            document.getElementById("message").innerHTML = `Too high! You have ${maxAttempts - attempts} attempts left.`;
+        }
+
+        if (attempts >= maxAttempts) {
+            document.getElementById("message").innerHTML = `Game Over! The correct number was ${randomNumber}.`;
+            document.getElementById("resetBtn").style.display = 'block';
+            document.querySelector("button").disabled = true;
+        }
+    }
+
+    function resetGame() {
+        startGame();
+    }
+
+    // Initialize the game
+    startGame();
+</script>
+
+</body>
+</html>
